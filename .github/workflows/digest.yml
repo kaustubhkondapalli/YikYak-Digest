@@ -22,8 +22,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y chromium-browser chromium-chromedriver
-          echo "CHROME_BIN=$(which chromium-browser)" >> $GITHUB_ENV
-          echo "CHROMEDRIVER_PATH=$(which chromedriver)" >> $GITHUB_ENV
+          CHROMIUM_PATH=$(which chromium-browser || which chromium)
+          CHROMEDRIVER_PATH=$(which chromedriver)
+          echo "CHROME_BIN=$CHROMIUM_PATH" >> $GITHUB_ENV
+          echo "CHROMEDRIVER_PATH=$CHROMEDRIVER_PATH" >> $GITHUB_ENV
+          ln -sf $CHROMIUM_PATH /usr/local/bin/google-chrome
 
       - name: Install Python dependencies
         run: pip install -r requirements.txt
