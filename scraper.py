@@ -38,7 +38,12 @@ def make_driver():
     opts.add_experimental_option("prefs", {
         "profile.default_content_setting_values.geolocation": 1
     })
-    driver = webdriver.Chrome(options=opts)
+    import os
+    from selenium.webdriver.chrome.service import Service
+    chrome_bin = os.environ.get("CHROME_BIN", "/usr/bin/chromium-browser")
+    chromedriver = os.environ.get("CHROMEDRIVER_PATH", "/usr/bin/chromedriver")
+    opts.binary_location = chrome_bin
+    driver = webdriver.Chrome(service=Service(chromedriver), options=opts)
     # Override JS geolocation
     driver.execute_cdp_cmd("Emulation.setGeolocationOverride", {
         "latitude": UT_LAT, "longitude": UT_LNG, "accuracy": 50
